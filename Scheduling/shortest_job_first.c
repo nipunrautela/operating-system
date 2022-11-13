@@ -29,36 +29,51 @@ void print_process(struct Process p)
 struct Process *next_process(struct Process processes[], int n, char *executed, int *time_elapsed)
 {
     int i = 0;
-    // finding the first non-executed process
-    while (i < n && executed[i] == 'y')
-        i++;
-    if (i == n)
-        return NULL;
 
-    // checking for gaps - no execution period
-    int min_time = i;
-    while (i < n && executed[i] == 'n' && processes[i].arrival_time > *time_elapsed)
+    // find the first non-executed and arrived process
+    while (i < n && (executed[i] == 'y' || processes[i].arrival_time > *time_elapsed))
         i++;
+
+    // if there is no process arrived
     if (i == n)
     {
-        for (int i = min_time + 1; i < n; i++)
-            if (executed[i] == 'n' && processes[i].arrival_time < processes[min_time].arrival_time)
-                min_time = i;
+        printf("no process arrived\n");
+        int min_time = 0;
+        for (int j = 0; j < n; j++)
+            if (executed[j] == 'n')
+            {
+                min_time = j;
+                break;
+            }
+        for (int j = 0; j < n; j++)
+        {
+            if (executed[j] == 'n' && processes[i].arrival_time < processes[min_time].arrival_time)
+                min_time = j;
+        }
+
+        if (processes[min_time].arrival_time > *time_elapsed)
+            *time_elapsed = processes[min_time].arrival_time;
     }
-    *time_elapsed = processes[min_time].arrival_time;
 
     // finding the process with minimum burst time which hasn't executed and is in waiting queue(has arrived)
-    int min_idx = i;
-    for (i = i + 1; i < n; i++)
-    {
-        if (processes[i].arrival_time >= *time_elapsed && processes[i].burst_time < processes[min_idx].burst_time && executed[i] == 'n')
+    int min_idx = 0;
+    for (i = 1; i < n; i++)
+        if (processes[i].arrival_time <= *time_elapsed && executed[i] == 'n')
         {
             min_idx = i;
-            // printf("%d ", i);
+            break;
+        }
+    printf("%d ", min_idx);
+    for (i = 0; i < n; i++)
+    {
+        printf("%d ", i);
+        if (processes[i].arrival_time <= *time_elapsed && processes[i].burst_time < processes[min_idx].burst_time && executed[i] == 'n')
+        {
+            min_idx = i;
         }
     }
-    // printf("m-%d ", min_idx);
-    // printf("t-%d\n", *time_elapsed);
+    printf("m-%d ", min_idx);
+    printf("t-%d\n", *time_elapsed);
     *time_elapsed += processes[min_idx].burst_time;
     executed[min_idx] = 'y';
 
@@ -75,11 +90,17 @@ int main()
 {
     int n = 5;
     struct Process processes[] = {
-        {1, 3, 1},
-        {2, 1, 4},
-        {3, 4, 2},
-        {4, 0, 6},
-        {5, 2, 3}};
+        {1, 2, 6},
+        {2, 5, 2},
+        {3, 1, 8},
+        {4, 0, 3},
+        {5, 4, 4}};
+
+    // struct Process processes[] = {
+    //     {1, 0, 10},
+    //     {2, 1, 6},
+    //     {3, 3, 2},
+    //     {4, 5, 4}};
 
     struct Process *execution_order = malloc(n * sizeof(struct Process));
 
@@ -91,6 +112,7 @@ int main()
     for (int i = 0; i < n; i++)
         if (processes[i].arrival_time < time_elapsed)
             time_elapsed = processes[i].arrival_time;
+    // printf("te-%d\n", time_elapsed);
 
     for (int i = 0; i < n; i++)
     {
