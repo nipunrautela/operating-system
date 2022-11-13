@@ -5,6 +5,7 @@ struct Process
 {
     int id;
     int arrival_time;
+    int burst_time;
 };
 
 void swap_processes(struct Process *p1, struct Process *p2)
