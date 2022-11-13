@@ -1,9 +1,9 @@
 # Operating System Algorithms
 
-===
 
-## List
+## List of 
 
-1. Bootloader Programs
-2. Scheduling Algorithms
-3. 
+1. Bootloaders
+2. Scheduling
+3. Resource Management
+4. Memory Management
