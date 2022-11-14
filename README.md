@@ -10,3 +10,5 @@
     * Priority
 3. Resource Management
 4. Memory Management
+5. Page Replacement
+    * First In First Out
