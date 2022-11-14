@@ -63,17 +63,17 @@ struct Process *next_process(struct Process processes[], int n, char *executed, 
             min_idx = i;
             break;
         }
-    printf("%d ", min_idx);
+    // printf("%d ", min_idx);
     for (i = 0; i < n; i++)
     {
-        printf("%d ", i);
+        // printf("%d ", i);
         if (processes[i].arrival_time <= *time_elapsed && processes[i].burst_time < processes[min_idx].burst_time && executed[i] == 'n')
         {
             min_idx = i;
         }
     }
-    printf("m-%d ", min_idx);
-    printf("t-%d\n", *time_elapsed);
+    // printf("m-%d ", min_idx);
+    // printf("t-%d\n", *time_elapsed);
     *time_elapsed += processes[min_idx].burst_time;
     executed[min_idx] = 'y';
 
@@ -95,12 +95,6 @@ int main()
         {3, 1, 8},
         {4, 0, 3},
         {5, 4, 4}};
-
-    // struct Process processes[] = {
-    //     {1, 0, 10},
-    //     {2, 1, 6},
-    //     {3, 3, 2},
-    //     {4, 5, 4}};
 
     struct Process *execution_order = malloc(n * sizeof(struct Process));
 
